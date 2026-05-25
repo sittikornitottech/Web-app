@@ -3,453 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINEAR MODULATION</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #f0f4f8;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        .header {
-            text-align: center;
-            border-bottom: 3px solid #2b579a;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-        .header h1 {
-            color: #2b579a;
-            margin: 0;
-            font-size: 24px;
-        }
-        .header p {
-            color: #666;
-            margin: 5px 0 0 0;
-        }
-        .control-panel {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 5px solid #2b579a;
-            margin-bottom: 25px;
-        }
-        .panel-title {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: #2b579a;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .btn-reset {
-            background: #2b579a;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .btn-reset:hover {
-            background: #1e3d70;
-        }
-        .grid-controls {
-            display: table;
-            width: 100%;
-        }
-        .grid-row {
-            display: table-row;
-        }
-        .grid-cell {
-            display: table-cell;
-            width: 25%;
-            padding: 10px;
-            vertical-align: top;
-        }
-        .control-group {
-            margin-bottom: 10px;
-        }
-        .control-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        .control-group input[type="range"] {
-            width: 100%;
-            margin-top: 5px;
-        }
-        .value-display {
-            font-weight: normal;
-            color: #2b579a;
-        }
-        .math-box {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 15px;
-            line-height: 1.5;
-        }
-        .math-title {
-            font-family: sans-serif;
-            font-size: 12px;
-            color: #718096;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        .canvas-container {
-            margin-bottom: 20px;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 15px;
-        }
-        .canvas-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #4a5568;
-        }
-        canvas {
-            width: 100%;
-            height: 160px;
-            display: block;
-        }
-        .analysis-panel {
-            background: #edf2f7;
-            padding: 20px;
-            border-radius: 8px;
-            border-top: 4px solid #48bb78;
-        }
-        .analysis-grid {
-            display: table;
-            width: 100%;
-        }
-        .analysis-cell {
-            display: table-cell;
-            width: 33.33%;
-            padding: 10px;
-            vertical-align: top;
-        }
-        .stat-card {
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-            height: 100%;
-        }
-        .stat-label {
-            font-size: 12px;
-            color: #718096;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .stat-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2d3748;
-            margin: 8px 0;
-        }
-        .stat-desc {
-            font-size: 12px;
-            color: #a0aec0;
-        }
-        @media (max-width: 768px) {
-            .grid-cell, .analysis-cell {
-                display: block;
-                width: 100%;
-                padding: 5px 0;
-            }
-        }
-    </style>
+    <title>Principles of Communication - Chapter 3</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>111ระบบจำลองใบงาน Practice 3.12 (AM Modulation & Demodulation)151</h1>
-        <p>วิชา TE3000 : Principles of Communication | ปรับเปลี่ยนสมการและดูรูปคลื่นแบบเรียลไทม์</p>
+    <div class="header-bar">
+        <h1>รายวิชา: Principles of Communication (TE3000)</h1>
+        <p>Faculty of Industrial Education | KMUTNB</p>
     </div>
 
-    <div class="main-layout">
-        <div class="control-panel">
-            <div class="panel-title">
-                <span>พารามิเตอร์ของระบบ (Input Parameters)</span>
-                <button class="btn-reset" onclick="resetToDefaults()">รีเซ็ตเป็นค่าเริ่มต้นตามโจทย์</button>
-            </div>
-            
-            <div class="grid-controls">
-                <div class="grid-row">
-                    <div class="grid-cell">
-                        <div class="control-group">
-                            <label>Message Amp (Am): <span id="Am-val" class="value-display">10</span></label>
-                            <input type="range" id="param-Am" min="1" max="25" step="0.5" value="10">
-                        </div>
-                        <div class="control-group">
-                            <label>Message Freq (fm): <span id="fm-val" class="value-display">10</span> Hz</label>
-                            <input type="range" id="param-fm" min="2" max="30" step="1" value="10">
-                        </div>
-                    </div>
-                    
-                    <div class="grid-cell">
-                        <div class="control-group">
-                            <label>Carrier Amp (Ac): <span id="Ac-val" class="value-display">25</span></label>
-                            <input type="range" id="param-Ac" min="15" max="50" step="1" value="25">
-                        </div>
-                        <div class="control-group">
-                            <label>Carrier Freq (fc): <span id="fc-val" class="value-display">150</span> Hz</label>
-                            <input type="range" id="param-fc" min="100" max="250" step="5" value="150">
-                        </div>
-                    </div>
-
-                    <div class="grid-cell" style="width: 50%;">
-                        <div class="math-title">สมการคณิตศาสตร์ที่เกิดขึ้นในระบบ (Mathematical Equations)</div>
-                        <div class="math-box">
-                            <div><strong>m(t)</strong> = <span id="eq-mt">10 · cos(2π(10)t)</span></div>
-                            <div><strong>x<sub>c</sub>(t)</strong> = <span id="eq-xct">25[1 + 0.40·cos(2π(10)t)] · cos(2π(150)t)</span></div>
-                            <div><strong>y<sub>D</sub>(t)</strong> = <span id="eq-ydt">25[1 + 0.40·cos(2π(10)t)] · [cos(2π(300)t) + 1]</span></div>
-                            <div><strong>m̂<sub>n</sub>(t)</strong> = <span id="eq-mnt">25[1 + 0.40·cos(2π(10)t)]</span> (หลังผ่าน Low Pass Filter)</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="visual-panel">
-            <div class="canvas-container">
-                <div class="canvas-title">1) สัญญาณข้อมูลแบบนอร์มัลไลซ์: m<sub>n</sub>(t) = cos(2π(f<sub>m</sub>)t)</div>
-                <canvas id="canvas-mn" width="1000" height="160"></canvas>
-            </div>
-
-            <div class="canvas-container">
-                <div class="canvas-title">2) สัญญาณพาหะ (Unmodulated Carrier): c(t) = A<sub>c</sub> · cos(2π(f<sub>c</sub>)t)</div>
-                <canvas id="canvas-c" width="1000" height="160"></canvas>
-            </div>
-
-            <div class="canvas-container">
-                <div class="canvas-title">3) สัญญาณที่ถูกมอดูเลตแล้ว: x<sub>c</sub>(t) = A<sub>c</sub>[1 + μ · m<sub>n</sub>(t)] · cos(2π(f<sub>c</sub>)t)</div>
-                <canvas id="canvas-xc" width="1000" height="160"></canvas>
-            </div>
-
-            <div class="canvas-container">
-                <div class="canvas-title">4) สัญญาณหลังการดีมอดูเลต (คูณ Carrier ซ้ำก่อนเข้า Filter): y<sub>D</sub>(t) = x<sub>c</sub>(t) · 2cos(2π(f<sub>c</sub>)t)</div>
-                <canvas id="canvas-yd" width="1000" height="160"></canvas>
-            </div>
-
-            <div class="canvas-container">
-                <div class="canvas-title">5) สัญญาณเอาต์พุตสุดท้ายหลังผ่านตัวกรองความถี่ต่ำ: m̂<sub>n</sub>(t) (Filtered Output)</div>
-                <canvas id="canvas-output" width="1000" height="160"></canvas>
-            </div>
-        </div>
-
-        <div class="analysis-panel">
-            <div class="canvas-title" style="color: #2c3e50; margin-bottom: 15px;">ผลการวิเคราะห์ทางทฤษฎีจากพารามิเตอร์ปัจจุบัน</div>
-            <div class="analysis-grid">
-                <div class="grid-row">
-                    <div class="analysis-cell">
-                        <div class="stat-card">
-                            <div class="stat-label">Modulation Index (μ)</div>
-                            <div id="stat-mu" class="stat-value">0.40</div>
-                            <div class="stat-desc">คำนวณจาก Am / Ac (μ ≤ 1 คือสัญญาณไม่เพี้ยน)</div>
-                        </div>
-                    </div>
-                    <div class="analysis-cell">
-                        <div class="stat-card">
-                            <div class="stat-label">Bandwidth (BW)</div>
-                            <div id="stat-bw" class="stat-value">20 Hz</div>
-                            <div class="stat-desc">คำนวณจาก 2 × fm (ความกว้างช่องสัญญาณ)</div>
-                        </div>
-                    </div>
-                    <div class="analysis-cell">
-                        <div class="stat-card">
-                            <div class="stat-label">Transmission Efficiency (η)</div>
-                            <div id="stat-eff" class="stat-value">7.41%</div>
-                            <div class="stat-desc">ประสิทธิภาพการส่งกำลังสัญญาณข้อมูล η = μ² / (2 + μ²)</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    const paramAm = document.getElementById('param-Am');
-    const paramFm = document.getElementById('param-fm');
-    const paramAc = document.getElementById('param-Ac');
-    const paramFc = document.getElementById('param-fc');
-
-    const AmVal = document.getElementById('Am-val');
-    const fmVal = document.getElementById('fm-val');
-    const AcVal = document.getElementById('Ac-val');
-    const fcVal = document.getElementById('fc-val');
-
-    const eqMt = document.getElementById('eq-mt');
-    const eqXct = document.getElementById('eq-xct');
-    const eqYdt = document.getElementById('eq-ydt');
-    const eqMnt = document.getElementById('eq-mnt');
-
-    const statMu = document.getElementById('stat-mu');
-    const statBw = document.getElementById('stat-bw');
-    const statEff = document.getElementById('stat-eff');
-
-    const canvasMn = document.getElementById('canvas-mn');
-    const canvasC = document.getElementById('canvas-c');
-    const canvasXc = document.getElementById('canvas-xc');
-    const canvasYd = document.getElementById('canvas-yd');
-    const canvasOutput = document.getElementById('canvas-output');
-
-    function resetToDefaults() {
-        paramAm.value = 10;
-        paramFm.value = 10;
-        paramAc.value = 25;
-        paramFc.value = 150;
-        updateAll();
-    }
-
-    function drawGrid(canvas, ctx) {
-        const w = canvas.width;
-        const h = canvas.height;
-        const midY = h / 2;
-
-        ctx.clearRect(0, 0, w, h);
-        ctx.strokeStyle = '#f0f0f0';
-        ctx.lineWidth = 1;
+    <div class="container">
         
-        for (let x = 0; x < w; x += 50) {
-            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-        }
-        for (let y = 0; y < h; y += 20) {
-            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-        }
+        <div id="main-menu" class="page active">
+            <div class="card">
+                <div class="chapter-title">บทที่ 3: LINEAR MODULATION</div>
+                <ul class="menu-list">
+                    <li class="menu-item" onclick="navigateTo('page-3-1')">
+                        <span>3.1 DOUBLE-SIDEBAND MODULATION</span>
+                        <span class="badge">ไม่มีแล็บ</span>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('page-3-2')">
+                        <span>3.2 AMPLITUDE MODULATION (AM)</span>
+                        <span class="badge" style="background-color: #48bb78; color: white;">มีเครื่องจำลอง Practice 3.12</span>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('page-3-3')">
+                        <span>3.3 SINGLE-SIDEBAND (SSB) MODULATION</span>
+                        <span class="badge">ไม่มีแล็บ</span>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('page-3-4')">
+                        <span>3.4 VESTIGIAL-SIDEBAND (VSB) MODULATION</span>
+                        <span class="badge">ไม่มีแล็บ</span>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('page-3-5')">
+                        <span>3.5 FREQUENCY TRANSLATION AND MIXING</span>
+                        <span class="badge">ไม่มีแล็บ</span>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('page-3-6')">
+                        <span>3.6 INTERFERENCE IN LINEAR MODULATION</span>
+                        <span class="badge">ไม่มีแล็บ</span>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('style-3-7')">
+                        <span>3.7 PULSE AMPLITUDE MODULATION (PAM)</span>
+                        <span class="badge">ไม่มีแล็บ</span>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('page-3-8')">
+                        <span>3.8 DIGITAL PULSE MODULATION</span>
+                        <span class="badge">ไม่มีแล็บ</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-        ctx.strokeStyle = '#cbd5e0';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke();
-    }
-
-    function updateAll() {
-        const Am = parseFloat(paramAm.value);
-        const fm = parseFloat(paramFm.value);
-        const Ac = parseFloat(paramAc.value);
-        const fc = parseFloat(paramFc.value);
-
-        const mu = Am / Ac;
-        const bw = 2 * fm;
-        const efficiency = (Math.pow(mu, 2) / (2 + Math.pow(mu, 2))) * 100;
-
-        AmVal.innerText = Am;
-        fmVal.innerText = fm;
-        AcVal.innerText = Ac;
-        fcVal.innerText = fc;
-
-        statMu.innerText = mu.toFixed(2);
-        statBw.innerText = bw + " Hz";
-        statEff.innerText = efficiency.toFixed(2) + "%";
-
-        if (mu > 1) {
-            statMu.style.color = '#e53e3e';
-            statMu.innerText += " (Overmodulation! รูปคลื่นหักเหเพี้ยน)";
-        } else {
-            statMu.style.color = '#2d3748';
-        }
-
-        eqMt.innerText = `${Am} · cos(2π(${fm})t)`;
-        eqXct.innerText = `${Ac}[1 + ${mu.toFixed(2)}·cos(2π(${fm})t)] · cos(2π(${fc})t)`;
-        eqYdt.innerText = `${Ac}[1 + ${mu.toFixed(2)}·cos(2π(${fm})t)] · [cos(2π(${2*fc})t) + 1]`;
-        eqMnt.innerText = `${Ac}[1 + ${mu.toFixed(2)}·cos(2π(${fm})t)]`;
-
-        const scaleY = 1.8; 
-        const ctxMn = canvasMn.getContext('2d');
-        const ctxC = canvasC.getContext('2d');
-        const ctxXc = canvasXc.getContext('2d');
-        const ctxYd = canvasYd.getContext('2d');
-        const ctxOutput = canvasOutput.getContext('2d');
-
-        drawGrid(canvasMn, ctxMn);
-        drawGrid(canvasC, ctxC);
-        drawGrid(canvasXc, ctxXc);
-        drawGrid(canvasYd, ctxYd);
-        drawGrid(canvasOutput, ctxOutput);
-
-        const totalTime = 0.2; 
-
-        ctxMn.beginPath(); ctxMn.strokeStyle = '#3182ce'; ctxMn.lineWidth = 2;
-        ctxC.beginPath(); ctxC.strokeStyle = '#718096'; ctxC.lineWidth = 1;
-        ctxXc.beginPath(); ctxXc.strokeStyle = '#2b579a'; ctxXc.lineWidth = 1.2;
-        ctxYd.beginPath(); ctxYd.strokeStyle = '#dd6b20'; ctxYd.lineWidth = 1;
-        ctxOutput.beginPath(); ctxOutput.strokeStyle = '#38a169'; ctxOutput.lineWidth = 2;
-
-        let envTopPoints = [];
-        let envBotPoints = [];
-
-        for (let x = 0; x < canvasMn.width; x++) {
-            let t = (x / canvasMn.width) * totalTime;
-
-            // 1. Normalized Message Signal
-            let mn_val = Math.cos(2 * Math.PI * fm * t);
-            let y_mn = (canvasMn.height / 2) - (mn_val * 40 * scaleY);
-            if (x === 0) ctxMn.moveTo(x, y_mn); else ctxMn.lineTo(x, y_mn);
-
-            // 2. Carrier Signal
-            let c_val = Ac * Math.cos(2 * Math.PI * fc * t);
-            let y_c = (canvasC.height / 2) - (c_val * scaleY);
-            if (x === 0) ctxC.moveTo(x, y_c); else ctxC.lineTo(x, y_c);
-
-            // 3. AM Modulated Signal
-            let envelope = Ac * (1 + mu * mn_val);
-            let xc_val = envelope * Math.cos(2 * Math.PI * fc * t);
-            let y_xc = (canvasXc.height / 2) - (xc_val * scaleY);
-            if (x === 0) ctxXc.moveTo(x, y_xc); else ctxXc.lineTo(x, y_xc);
+        <div id="page-3-2" class="page">
+            <button class="btn-back" onclick="navigateTo('main-menu')">← กลับไปหน้าหลัก</button>
             
-            envTopPoints.push({x: x, y: (canvasXc.height / 2) - (envelope * scaleY)});
-            envBotPoints.push({x: x, y: (canvasXc.height / 2) + (envelope * scaleY)});
+            <div id="am-simulator-container"></div>
+        </div>
 
-            // 4. Demodulated Output Before LPF
-            let yd_val = xc_val * 2 * Math.cos(2 * Math.PI * fc * t);
-            let y_yd = (canvasYd.height / 2) - (yd_val * 0.5 * scaleY);
-            if (x === 0) ctxYd.moveTo(x, y_yd); else ctxYd.lineTo(x, y_yd);
+        <div id="page-3-1" class="page"><button class="btn-back" onclick="navigateTo('main-menu')">← กลับ</button><div class="card"><div class="chapter-title">3.1 DOUBLE-SIDEBAND MODULATION</div><p style="color:#718096">ยังไม่มีการอัปโหลดเนื้อหาในระบบ</p></div></div>
+        <div id="page-3-3" class="page"><button class="btn-back" onclick="navigateTo('main-menu')">← กลับ</button><div class="card"><div class="chapter-title">3.3 SINGLE-SIDEBAND (SSB)</div><p style="color:#718096">อยู่ระหว่างการพัฒนา</p></div></div>
+        <div id="page-3-4" class="page"><button class="btn-back" onclick="navigateTo('main-menu')">← กลับ</button><div class="card"><div class="chapter-title">3.4 VESTIGIAL-SIDEBAND (VSB)</div><p style="color:#718096">อยู่ระหว่างการพัฒนา</p></div></div>
+        <div id="page-3-5" class="page"><button class="btn-back" onclick="navigateTo('main-menu')">← กลับ</button><div class="card"><div class="chapter-title">3.5 FREQUENCY TRANSLATION</div><p style="color:#718096">อยู่ระหว่างการพัฒนา</p></div></div>
+        <div id="page-3-6" class="page"><button class="btn-back" onclick="navigateTo('main-menu')">← กลับ</button><div class="card"><div class="chapter-title">3.6 INTERFERENCE</div><p style="color:#718096">อยู่ระหว่างการพัฒนา</p></div></div>
+        <div id="style-3-7" class="page"><button class="btn-back" onclick="navigateTo('main-menu')">← กลับ</button><div class="card"><div class="chapter-title">3.7 PULSE AMPLITUDE (PAM)</div><p style="color:#718096">อยู่ระหว่างการพัฒนา</p></div></div>
+        <div id="page-3-8" class="page"><button class="btn-back" onclick="navigateTo('main-menu')">← กลับ</button><div class="card"><div class="chapter-title">3.8 DIGITAL PULSE MODULATION</div><p style="color:#718096">อยู่ระหว่างการพัฒนา</p></div></div>
 
-            // 5. Filtered Output (m̂_n)
-            let y_out = (canvasOutput.height / 2) - (envelope * scaleY);
-            if (x === 0) ctxOutput.moveTo(x, y_out); else ctxOutput.lineTo(x, y_out);
-        }
+    </div>
 
-        ctxMn.stroke(); ctxC.stroke(); ctxXc.stroke(); ctxYd.stroke(); ctxOutput.stroke();
-
-        // วาดเส้นกรอบซองสัญญาณ (Envelope) ประสีแดงบนช่องสัญญาณมอดูเลต
-        ctxXc.beginPath();
-        ctxXc.strokeStyle = 'rgba(229, 62, 62, 0.6)';
-        ctxXc.setLineDash([4, 4]);
-        ctxXc.moveTo(envTopPoints[0].x, envTopPoints[0].y);
-        for(let i=1; i<envTopPoints.length; i++) ctxXc.lineTo(envTopPoints[i].x, envTopPoints[i].y);
-        ctxXc.moveTo(envBotPoints[0].x, envBotPoints[0].y);
-        for(let i=1; i<envBotPoints.length; i++) ctxXc.lineTo(envBotPoints[i].x, envBotPoints[i].y);
-        ctxXc.stroke(); ctxXc.setLineDash([]);
-    }
-
-    paramAm.addEventListener('input', updateAll);
-    paramFm.addEventListener('input', updateAll);
-    paramAc.addEventListener('input', updateAll);
-    paramFc.addEventListener('input', updateAll);
-
-    updateAll();
-</script>
+    <script src="theory-data.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
